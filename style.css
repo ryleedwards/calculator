@@ -3,3 +3,42 @@
   margin: 0;
   box-sizing: border-box;
 }
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.main {
+  height: 768px;
+  width: 1024px;
+  margin-top: 64px;
+  background-color: rgb(50, 50, 50);
+  display: flex;
+  flex-direction: column;
+  padding: 0 36px;
+}
+
+.display {
+  border: solid 12px gray;
+  height: 128px;
+  width: 100%;
+  margin: 48px 0 48px;
+  padding: 16px;
+  font-size: 56px;
+  text-align: right;
+  background-color: rgb(190, 209, 191);
+  font-family: "Orbitron", sans-serif;
+}
+
+.input-area {
+  display: grid;
+}
+
+.btn {
+  height: 96px;
+  width: 96px;
+  border-radius: 8px;
+  margin: 6px;
+}
