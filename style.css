@@ -86,3 +86,8 @@ body {
   background-color: var(--orange-button);
   color: white;
 }
+
+.btn:active {
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
