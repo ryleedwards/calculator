@@ -2,8 +2,13 @@
 const buttons = document.querySelectorAll("button");
 buttons.forEach((button) => {
   button.addEventListener("click", (e) => {
-    if (e.target.classList[1] == "digit") {
-      addToDisplay(e.target);
+    switch (e.target.classList[1]) {
+      case "digit":
+        addToDisplay(e.target);
+        break;
+      case "clear":
+        clear();
+        break;
     }
   });
 });
@@ -72,4 +77,9 @@ function addToDisplay(digitButton) {
     }
   }
   console.log(currentValue);
+}
+
+function clear() {
+  display.textContent = "0";
+  currentValue = undefined;
 }
