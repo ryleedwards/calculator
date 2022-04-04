@@ -14,7 +14,7 @@ const topDisplay = document.querySelector(".top-output");
 /* Declare values to be stored 
 value1 = bottom value
 value2 = top value */
-let value1, value2, tempValue, prevOperator;
+let value1, value2, tempValue, currOperator;
 
 function checkInput(e, input) {
   switch (input) {
@@ -28,9 +28,32 @@ function checkInput(e, input) {
     case "subtract":
     case "multiply":
     case "divide":
+      if (!currOperator) currOperator = input;
+      if (!value1) {
+        value1 = storeValue(display.textContent);
+        topDisplay.textContent = value1;
+        display.textContent = 0;
+      } else if (!value2) {
+        value2 = storeValue(display.textContent);
+        value1 = storeValue(operate(currOperator, value1, value2));
+        topDisplay.textContent = value1;
+        display.textContent = 0;
+        value2 = undefined;
+      }
+      currOperator = input;
       break;
     case "equal":
-      break;
+      if (currOperator) {
+        value2 = storeValue(display.textContent);
+        value1 = storeValue(operate(currOperator, value1, value2));
+        topDisplay.textContent = value1;
+        display.textContent = 0;
+        value2 = undefined;
+        currOperator = undefined;
+        break;
+      } else {
+        break;
+      }
   }
 }
 
