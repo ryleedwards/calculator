@@ -14,11 +14,9 @@ const topDisplay = document.querySelector(".top-output");
 /* Declare values to be stored 
 value1 = bottom value
 value2 = top value */
-let value1, value2, tempValue;
-prevOperator = undefined;
+let value1, value2, tempValue, prevOperator;
 
 function checkInput(e, input) {
-  let inputSymbol = "";
   switch (input) {
     case "digit":
       addToDisplay(e.target);
@@ -30,32 +28,15 @@ function checkInput(e, input) {
     case "subtract":
     case "multiply":
     case "divide":
-      if (value1 == undefined) {
-        value1 = parseFloat(display.textContent);
-        console.log(`stored value1 as ${value1}`);
-        topDisplay.textContent = `${value1}`;
-        display.textContent = "0";
-        prevOperator = input;
-        console.log(`prevOperator stored as ${prevOperator}`);
-      } else if (value1) {
-        value2 = parseFloat(display.textContent);
-        console.log(`stored value2 as ${value2}`);
-        display.textContent = "0";
-      }
       break;
     case "equal":
-      value2 = parseFloat(display.textContent);
-      console.log(`v1 = ${value1} // v2 = ${value2} // tV = ${tempValue}`);
-      tempValue = operate(prevOperator, value1, value2);
-      topDisplay.textContent = "";
-      display.textContent = tempValue;
-      value1 = undefined;
       break;
   }
 }
 
 /* Operator function to call add, subtract, multiply, divide */
 function operate(operator, num1, num2) {
+  let output = "";
   switch (operator) {
     case "add":
       return add(num1, num2);
@@ -64,6 +45,7 @@ function operate(operator, num1, num2) {
     case "multiply":
       return multiply(num1, num2);
     case "divide":
+      output = `${num1} ÷ ${num2}`;
       return divide(num1, num2);
   }
 }
@@ -97,4 +79,11 @@ function fullClear() {
   topDisplay.textContent = "";
   value1 = undefined;
   value2 = undefined;
+  tempValue = undefined;
+}
+
+function storeValue(value) {
+  value = parseFloat(value);
+  value = Math.round(value * 10000000) / 10000000;
+  return value;
 }
