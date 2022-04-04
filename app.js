@@ -2,9 +2,18 @@
 const buttons = document.querySelectorAll("button");
 buttons.forEach((button) => {
   button.addEventListener("click", (e) => {
-    console.log(e.target);
+    if (e.target.classList[1] == "digit") {
+      addToDisplay(e.target);
+    }
   });
 });
+
+/* Register display */
+const display = document.querySelector(".output");
+
+/* Declare value for displaying */
+let currentValue;
+let decimalToggle = false;
 
 /* Operator function to call add, subtract, multiply, divide */
 function operate(operator, num1, num2) {
@@ -32,3 +41,35 @@ const multiply = (num1, num2) => {
 const divide = (num1, num2) => {
   return num1 / num2;
 };
+
+function addToDisplay(digitButton) {
+  /* check for 0 value */
+  if (display.textContent == "0") {
+    display.textContent = "";
+    addToDisplay(digitButton);
+
+    /* If NOT initial value, proceed to concat onto display and store in currentValue */
+  } else {
+    display.textContent += digitButton.textContent;
+
+    // handle undefined currentValue (first digit entry);
+    if (currentValue == undefined) {
+      currentValue = digitButton.textContent;
+      currentValue = parseFloat(currentValue);
+    } else if (digitButton.textContent == ".") {
+      decimalToggle = true;
+    }
+    // add button value to currentValue and display
+    else {
+      if (decimalToggle) {
+        currentValue = currentValue.toString() + "." + digitButton.textContent;
+        currentValue = parseFloat(currentValue);
+        decimalToggle = false;
+      } else {
+        currentValue = currentValue.toString() + digitButton.textContent;
+        currentValue = parseFloat(currentValue);
+      }
+    }
+  }
+  console.log(currentValue);
+}
