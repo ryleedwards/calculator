@@ -2,7 +2,8 @@
 const buttons = document.querySelectorAll("button");
 buttons.forEach((button) => {
   button.addEventListener("click", (e) => {
-    switch (e.target.classList[1]) {
+    let input = e.target.classList[1];
+    switch (input) {
       case "digit":
         addToDisplay(e.target);
         break;
@@ -13,9 +14,17 @@ buttons.forEach((button) => {
       case "subtract":
       case "multiply":
       case "divide":
+        let oldValue = currentValue;
         currentValue = storeValue();
-        console.log(currentValue);
+        console.log(`oldValue: ${oldValue} // currentValue: ${currentValue}`);
+        if (oldValue) {
+          let solution = operate(input, oldValue, currentValue);
+          console.log(`solution: ${solution}`);
+          display.textContent = solution.toString();
+          currentValue = solution;
+        }
         break;
+      case "equal":
     }
   });
 });
