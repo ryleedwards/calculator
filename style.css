@@ -34,14 +34,22 @@ body {
 
 .display {
   border: solid 12px gray;
-  height: 128px;
+  height: 4em;
   width: 100%;
-  margin: 48px 0 48px;
+  margin: 2rem 0 1.5rem;
   padding: 16px;
-  font-size: 56px;
+  font-size: 2rem;
   text-align: right;
   background-color: var(--screen-background);
   font-family: "Orbitron", sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.top-output {
+  font-size: 1rem;
+  height: 1rem;
 }
 
 .input-area {
