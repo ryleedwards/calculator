@@ -25,7 +25,6 @@ const display = document.querySelector(".output");
 
 /* Declare value for displaying */
 let currentValue;
-let decimalToggle = false;
 
 /* Operator function to call add, subtract, multiply, divide */
 function operate(operator, num1, num2) {
