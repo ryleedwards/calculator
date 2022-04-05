@@ -1,17 +1,17 @@
 /* Register buttons */
-const buttons = document.querySelectorAll('button');
+const buttons = document.querySelectorAll("button");
 buttons.forEach((button) => {
-  button.addEventListener('click', (e) => {
+  button.addEventListener("click", (e) => {
     let input = e.target.classList[1];
     checkInput(e, input);
   });
 });
 
-document.addEventListener('keydown', logKey);
+document.addEventListener("keydown", logKey);
 
 /* Register display */
-const display = document.querySelector('.output');
-const topDisplay = document.querySelector('.top-output');
+const display = document.querySelector(".output");
+const topDisplay = document.querySelector(".top-output");
 
 /* Declare values to be stored 
 value1 = bottom value
@@ -20,19 +20,19 @@ let value1, value2, tempValue, currOperator;
 
 function checkInput(e, input) {
   switch (input) {
-    case 'delete':
+    case "delete":
       display.textContent = backspace();
       break;
-    case 'digit':
+    case "digit":
       addToDisplay(e.target);
       break;
-    case 'clear':
+    case "clear":
       fullClear();
       break;
-    case 'add':
-    case 'subtract':
-    case 'multiply':
-    case 'divide':
+    case "add":
+    case "subtract":
+    case "multiply":
+    case "divide":
       if (!currOperator) currOperator = input;
       if (!value1) {
         value1 = storeValue(display.textContent);
@@ -47,7 +47,7 @@ function checkInput(e, input) {
       }
       currOperator = input;
       break;
-    case 'equal':
+    case "equal":
       if (currOperator) {
         value2 = storeValue(display.textContent);
         value1 = storeValue(operate(currOperator, value1, value2));
@@ -64,15 +64,15 @@ function checkInput(e, input) {
 
 /* Operator function to call add, subtract, multiply, divide */
 function operate(operator, num1, num2) {
-  let output = '';
+  let output = "";
   switch (operator) {
-    case 'add':
+    case "add":
       return add(num1, num2);
-    case 'subtract':
+    case "subtract":
       return subtract(num1, num2);
-    case 'multiply':
+    case "multiply":
       return multiply(num1, num2);
-    case 'divide':
+    case "divide":
       output = `${num1} ÷ ${num2}`;
       return divide(num1, num2);
   }
@@ -92,8 +92,8 @@ const divide = (num1, num2) => {
 };
 
 function addToDisplay(digitButton) {
-  if (display.textContent == '0') {
-    display.textContent = '';
+  if (display.textContent == "0") {
+    display.textContent = "";
     addToDisplay(digitButton);
 
     /* If NOT initial value, proceed to concat onto display and store in currentValue */
@@ -103,8 +103,8 @@ function addToDisplay(digitButton) {
 }
 
 function fullClear() {
-  display.textContent = '0';
-  topDisplay.textContent = '';
+  display.textContent = "0";
+  topDisplay.textContent = "";
   value1 = undefined;
   value2 = undefined;
   tempValue = undefined;
@@ -126,22 +126,43 @@ function backspace() {
   }
 }
 
-
-//need to change this to be Digit1 etc. 
-//will also require reworking how we handle the addToDisplay
-//    and the checkInput() function
 function logKey(e) {
-  console.log(e.code);
-  switch (e.code) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-    case 6:
-    case 7:
-    case 8:
-    case 9:
+  /* NUMBER PRESS */
+  int = parseInt(e.key);
+  if (int >= 0) {
+    if (display.textContent != "0") display.textContent += int;
+    else display.textContent = int;
+  } else {
+    /* OPERATOR PRESS */
+    switch (e.key) {
+      case ".":
+        display.textContent += ".";
+        break;
+      case "+":
+        checkInput(null, "add");
+        break;
+      case "-":
+        checkInput(null, "subtract");
+        break;
+      case "*":
+        checkInput(null, "multiply");
+        break;
+      case "/":
+        checkInput(null, "divide");
+        break;
+      case "Enter":
+        checkInput(null, "equal");
+        break;
+      case "=":
+        checkInput(null, "equal");
+        break;
+      case "Escape":
+        fullClear();
+        break;
+      case "Backspace":
+        display.textContent = backspace();
+        break;
+    }
   }
+  console.log(e.key);
 }
