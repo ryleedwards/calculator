@@ -1,15 +1,15 @@
 /* Register buttons */
-const buttons = document.querySelectorAll("button");
+const buttons = document.querySelectorAll('button');
 buttons.forEach((button) => {
-  button.addEventListener("click", (e) => {
+  button.addEventListener('click', (e) => {
     let input = e.target.classList[1];
     checkInput(e, input);
   });
 });
 
 /* Register display */
-const display = document.querySelector(".output");
-const topDisplay = document.querySelector(".top-output");
+const display = document.querySelector('.output');
+const topDisplay = document.querySelector('.top-output');
 
 /* Declare values to be stored 
 value1 = bottom value
@@ -18,16 +18,19 @@ let value1, value2, tempValue, currOperator;
 
 function checkInput(e, input) {
   switch (input) {
-    case "digit":
+    case 'delete':
+      display.textContent = backspace();
+      break;
+    case 'digit':
       addToDisplay(e.target);
       break;
-    case "clear":
+    case 'clear':
       fullClear();
       break;
-    case "add":
-    case "subtract":
-    case "multiply":
-    case "divide":
+    case 'add':
+    case 'subtract':
+    case 'multiply':
+    case 'divide':
       if (!currOperator) currOperator = input;
       if (!value1) {
         value1 = storeValue(display.textContent);
@@ -42,7 +45,7 @@ function checkInput(e, input) {
       }
       currOperator = input;
       break;
-    case "equal":
+    case 'equal':
       if (currOperator) {
         value2 = storeValue(display.textContent);
         value1 = storeValue(operate(currOperator, value1, value2));
@@ -59,15 +62,15 @@ function checkInput(e, input) {
 
 /* Operator function to call add, subtract, multiply, divide */
 function operate(operator, num1, num2) {
-  let output = "";
+  let output = '';
   switch (operator) {
-    case "add":
+    case 'add':
       return add(num1, num2);
-    case "subtract":
+    case 'subtract':
       return subtract(num1, num2);
-    case "multiply":
+    case 'multiply':
       return multiply(num1, num2);
-    case "divide":
+    case 'divide':
       output = `${num1} ÷ ${num2}`;
       return divide(num1, num2);
   }
@@ -87,8 +90,8 @@ const divide = (num1, num2) => {
 };
 
 function addToDisplay(digitButton) {
-  if (display.textContent == "0") {
-    display.textContent = "";
+  if (display.textContent == '0') {
+    display.textContent = '';
     addToDisplay(digitButton);
 
     /* If NOT initial value, proceed to concat onto display and store in currentValue */
@@ -98,8 +101,8 @@ function addToDisplay(digitButton) {
 }
 
 function fullClear() {
-  display.textContent = "0";
-  topDisplay.textContent = "";
+  display.textContent = '0';
+  topDisplay.textContent = '';
   value1 = undefined;
   value2 = undefined;
   tempValue = undefined;
@@ -109,4 +112,14 @@ function storeValue(value) {
   value = parseFloat(value);
   value = Math.round(value * 10000000) / 10000000;
   return value;
+}
+
+function backspace() {
+  current = display.textContent;
+  console.log(current.length);
+  if (current.length > 1) {
+    return current.substring(0, current.length - 1);
+  } else {
+    return 0;
+  }
 }
