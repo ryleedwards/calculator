@@ -7,6 +7,8 @@ buttons.forEach((button) => {
   });
 });
 
+document.addEventListener('keydown', logKey);
+
 /* Register display */
 const display = document.querySelector('.output');
 const topDisplay = document.querySelector('.top-output');
@@ -121,5 +123,25 @@ function backspace() {
     return current.substring(0, current.length - 1);
   } else {
     return 0;
+  }
+}
+
+
+//need to change this to be Digit1 etc. 
+//will also require reworking how we handle the addToDisplay
+//    and the checkInput() function
+function logKey(e) {
+  console.log(e.code);
+  switch (e.code) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
   }
 }
