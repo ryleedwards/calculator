@@ -6,6 +6,7 @@ const btnAdd = document.getElementById("+");
 const btnSubtract = document.getElementById("-");
 const btnMultiply = document.getElementById("x");
 const btnDivide = document.getElementById("÷");
+const operatorBtns = [btnAdd, btnSubtract, btnMultiply, btnDivide];
 buttons.forEach((button) => {
   button.addEventListener("click", buttonPress);
 });
@@ -18,7 +19,7 @@ const display = document.querySelector(".output");
 const topDisplay = document.querySelector(".top-output");
 
 // Global values
-let value1, value2, tempValue, currOperator;
+let value1, value2, currOperator;
 
 /* Begin functions */
 
@@ -113,15 +114,18 @@ function operator(operatorValue) {
     topDisplay.textContent = value1;
     display.textContent = "0";
     currOperator = operatorValue;
+    indicateBtn(currOperator);
   } else if (display.textContent != "0") {
     value2 = store(display.textContent);
     value1 = operate(currOperator, value1, value2);
     topDisplay.textContent = value1;
     display.textContent = "0";
     currOperator = operatorValue;
+    indicateBtn(currOperator);
     value2 = undefined;
   } else {
     currOperator = operatorValue;
+    indicateBtn(currOperator);
   }
 }
 
@@ -166,6 +170,7 @@ function action(entryValue) {
       display.textContent = 0;
       value2 = undefined;
       currOperator = undefined;
+      clearIndicators();
       break;
   }
 }
@@ -177,4 +182,34 @@ function backspace() {
   } else {
     display.textContent = "0";
   }
+}
+
+function indicateBtn(operator) {
+  clearIndicators();
+  let button;
+  switch (operator) {
+    case "+":
+      button = btnAdd;
+      break;
+    case "-":
+      button = btnSubtract;
+      break;
+    case "x":
+    case "*":
+      button = btnMultiply;
+      break;
+    case "÷":
+    case "/":
+      button = btnDivide;
+      break;
+  }
+  button.style.backgroundColor = `var(--button-press)`;
+  button.style.color = `var(--font-black)`;
+}
+
+function clearIndicators() {
+  operatorBtns.forEach((button) => {
+    button.style.backgroundColor = `var(--black-button)`;
+    button.style.color = `var(--font-gray)`;
+  });
 }
