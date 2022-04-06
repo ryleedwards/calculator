@@ -1,80 +1,81 @@
-/* Register buttons */
+const validInputs = ["1234567890.", "+-*/", "=EnterBackspaceEscape"];
+
+// Register buttons
 const buttons = document.querySelectorAll("button");
+const btnAdd = document.getElementById("+");
+const btnSubtract = document.getElementById("-");
+const btnMultiply = document.getElementById("x");
+const btnDivide = document.getElementById("÷");
 buttons.forEach((button) => {
-  button.addEventListener("click", (e) => {
-    let input = e.target.classList[1];
-    checkInput(e, input);
-  });
+  button.addEventListener("click", buttonPress);
 });
 
+// Register keydown
 document.addEventListener("keydown", logKey);
 
-/* Register display */
+// Register display
 const display = document.querySelector(".output");
 const topDisplay = document.querySelector(".top-output");
 
-/* Declare values to be stored 
-value1 = bottom value
-value2 = top value */
+// Global values
 let value1, value2, tempValue, currOperator;
 
-function checkInput(e, input) {
-  switch (input) {
-    case "delete":
-      display.textContent = backspace();
-      break;
+/* Begin functions */
+
+function buttonPress(e) {
+  let entry = {
+    type: e.target.classList[1],
+    value: e.target.classList[2],
+  };
+  handleEntry(entry);
+}
+
+function logKey(e) {
+  let entry = {
+    type: undefined,
+    value: e.key,
+  };
+  //assign type based on source const list of values validInputs
+  if (validInputs[0].includes(e.key)) {
+    entry.type = "digit";
+  } else if (validInputs[1].includes(e.key)) {
+    entry.type = "operator";
+  } else if (validInputs[2].includes(e.key)) {
+    entry.type = "action";
+  }
+  handleEntry(entry);
+}
+
+function handleEntry(entry) {
+  switch (entry.type) {
     case "digit":
-      addToDisplay(e.target);
+      digit(entry.value);
       break;
-    case "clear":
-      fullClear();
+    case "operator":
+      operator(entry.value);
       break;
-    case "add":
-    case "subtract":
-    case "multiply":
-    case "divide":
-      if (!currOperator) currOperator = input;
-      if (!value1) {
-        value1 = storeValue(display.textContent);
-        topDisplay.textContent = value1;
-        display.textContent = 0;
-      } else if (!value2) {
-        value2 = storeValue(display.textContent);
-        value1 = storeValue(operate(currOperator, value1, value2));
-        topDisplay.textContent = value1;
-        display.textContent = 0;
-        value2 = undefined;
-      }
-      currOperator = input;
+    case "action":
+      action(entry.value);
       break;
-    case "equal":
-      if (currOperator) {
-        value2 = storeValue(display.textContent);
-        value1 = storeValue(operate(currOperator, value1, value2));
-        topDisplay.textContent = value1;
-        display.textContent = 0;
-        value2 = undefined;
-        currOperator = undefined;
-        break;
-      } else {
-        break;
-      }
   }
 }
 
-/* Operator function to call add, subtract, multiply, divide */
-function operate(operator, num1, num2) {
-  let output = "";
-  switch (operator) {
-    case "add":
-      return add(num1, num2);
-    case "subtract":
-      return subtract(num1, num2);
-    case "multiply":
-      return multiply(num1, num2);
-    case "divide":
-      output = `${num1} ÷ ${num2}`;
-      return divide(num1, num2);
+function digit(entryValue) {
+  console.log(entryValue);
+  // check if display is maxed
+  if (display.textContent.length > 9) {
+    return;
+  }
+  // fresh entry
+  else if (display.textContent === "0") {
+    display.textContent = "";
+    digit(entryValue);
+    // don't allow another decimal
+  } else if (entryValue == "." && display.textContent.includes(".")) {
+    return;
+    // add to display
+  } else {
+    display.textContent += entryValue;
   }
 }
 
@@ -91,18 +92,7 @@ const divide = (num1, num2) => {
   return num1 / num2;
 };
 
-function addToDisplay(digitButton) {
-  if (display.textContent == "0") {
-    display.textContent = "";
-    addToDisplay(digitButton);
-
-    /* If NOT initial value, proceed to concat onto display and store in currentValue */
-  } else {
-    display.textContent += digitButton.textContent;
-  }
-}
-
-function fullClear() {
+function clear() {
   display.textContent = "0";
   topDisplay.textContent = "";
   value1 = undefined;
@@ -110,59 +100,81 @@ function fullClear() {
   tempValue = undefined;
 }
 
-function storeValue(value) {
+function store(value) {
   value = parseFloat(value);
   value = Math.round(value * 10000000) / 10000000;
   return value;
 }
 
-function backspace() {
-  current = display.textContent;
-  console.log(current.length);
-  if (current.length > 1) {
-    return current.substring(0, current.length - 1);
+// operator button is pushed
+function operator(operatorValue) {
+  if (!value1) {
+    value1 = store(display.textContent);
+    topDisplay.textContent = value1;
+    display.textContent = "0";
+    currOperator = operatorValue;
+  } else if (display.textContent != "0") {
+    value2 = store(display.textContent);
+    value1 = operate(currOperator, value1, value2);
+    topDisplay.textContent = value1;
+    display.textContent = "0";
+    currOperator = operatorValue;
+    value2 = undefined;
   } else {
-    return 0;
+    currOperator = operatorValue;
   }
 }
 
-function logKey(e) {
-  /* NUMBER PRESS */
-  int = parseInt(e.key);
-  if (int >= 0) {
-    if (display.textContent != "0") display.textContent += int;
-    else display.textContent = int;
-  } else {
-    /* OPERATOR PRESS */
-    switch (e.key) {
-      case ".":
-        display.textContent += ".";
-        break;
+function operate(operator, num1, num2) {
+  if (currOperator) {
+    switch (currOperator) {
       case "+":
-        checkInput(null, "add");
-        break;
+        return store(add(num1, num2));
       case "-":
-        checkInput(null, "subtract");
-        break;
+        return store(subtract(num1, num2));
+      case "x":
       case "*":
-        checkInput(null, "multiply");
-        break;
+        return store(multiply(num1, num2));
+      case "÷":
       case "/":
-        checkInput(null, "divide");
-        break;
-      case "Enter":
-        checkInput(null, "equal");
-        break;
-      case "=":
-        checkInput(null, "equal");
-        break;
-      case "Escape":
-        fullClear();
-        break;
-      case "Backspace":
-        display.textContent = backspace();
-        break;
+        if (num2 != 0) return store(divide(num1, num2));
+        else return "div/0";
     }
+  } else {
+    currOperator = operator;
   }
-  console.log(e.key);
+}
+
+function action(entryValue) {
+  switch (entryValue) {
+    case "Backspace":
+      backspace();
+      break;
+    case "Escape":
+      clear();
+      break;
+    case "Enter":
+    case "=":
+      if (!currOperator) {
+        return;
+      }
+      if (!value2) {
+        value2 = store(display.textContent);
+      }
+      value1 = operate(currOperator, value1, value2);
+      topDisplay.textContent = value1;
+      display.textContent = 0;
+      value2 = undefined;
+      currOperator = undefined;
+      break;
+  }
+}
+
+function backspace() {
+  current = display.textContent;
+  if (current.length > 1) {
+    display.textContent = current.substring(0, current.length - 1);
+  } else {
+    display.textContent = "0";
+  }
 }
