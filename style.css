@@ -2,8 +2,10 @@
   --screen-background: rgb(190, 209, 191);
   --calc-background: rgb(50, 50, 50);
   --red-button: rgb(114, 67, 61);
-  --black-button: rgb(37, 38, 40);
-  --font-gray: rgb(177, 186, 183);
+  --black-button: rgb(35, 35, 35);
+  --button-press: rgb(95, 95, 95);
+  --font-gray: rgb(175, 175, 175);
+  --font-black: rgb(25, 25, 25);
   --orange-button: rgb(246, 153, 6);
 }
 
