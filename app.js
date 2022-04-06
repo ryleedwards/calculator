@@ -152,9 +152,11 @@ function operate(operator, num1, num2) {
 function action(entryValue) {
   switch (entryValue) {
     case "Backspace":
+    case "delete":
       backspace();
       break;
     case "Escape":
+    case "clear":
       clear();
       break;
     case "Enter":
